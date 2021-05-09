@@ -6,7 +6,7 @@ This module will deploy a Log Analytics Workspace with solutions.
 
 param deploymentName string = concat('logAnalytics', utcNow())
 
-module test './main.bicep' = {
+module logAnalytics './main.bicep' = {
   name: deploymentName
   params: {
     name: 'myLogAnalyticsWorkspace'
