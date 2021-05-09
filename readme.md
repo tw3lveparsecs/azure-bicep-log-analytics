@@ -1,5 +1,5 @@
 # Log Analytics
-This module will deploy a Log Analytics Workspace.
+This module will deploy a Log Analytics Workspace with solutions.
 
 ## Usage
 ``` bicep
@@ -12,6 +12,20 @@ module test './main.bicep' = {
     name: 'myLogAnalyticsWorkspace'
     sku: 'PerGB2018'
     retentionInDays: 7
+    solutions = [
+      {
+        name: 'ContainerInsights'
+        product: 'OMSGallery/ContainerInsights'
+        publisher: 'Microsoft'
+        promotionCode: ''
+      }
+      {
+        name: 'Updates'
+        product: 'OMSGallery/Updates'
+        publisher: 'Microsoft'
+        promotionCode: ''
+      }
+    ]
   }
 }
 ```
