@@ -12,54 +12,13 @@ param sku string = 'Free'
 param retentionInDays int = 7
 param solutions array = [
   {
-    name: 'ContainerInsights'
-    product: 'OMSGallery/ContainerInsights'
-    publisher: 'Microsoft'
-    promotionCode: ''
-  }
-  {
-    name: 'SQLVulnerabilityAssessment'
-    product: 'OMSGallery/SQLVulnerabilityAssessment'
-    publisher: 'Microsoft'
-    promotionCode: ''
-  }
-  {
-    name: 'VMInsights'
-    product: 'OMSGallery/VMInsights'
-    publisher: 'Microsoft'
-    promotionCode: ''
-  }
-  {
-    name: 'KeyVaultAnalytics'
-    product: 'OMSGallery/KeyVaultAnalytics'
-    publisher: 'Microsoft'
-    promotionCode: ''
-  }
-  {
-    name: 'AzureSQLAnalytics'
-    product: 'OMSGallery/AzureSQLAnalytics'
-    publisher: 'Microsoft'
-    promotionCode: ''
-  }
-  {
-    name: 'Containers'
-    product: 'OMSGallery/Containers'
-    publisher: 'Microsoft'
-    promotionCode: ''
-  }
-  {
-    name: 'SQLAssessment'
-    product: 'OMSGallery/SQLAssessment'
-    publisher: 'Microsoft'
-    promotionCode: ''
-  }
-  {
-    name: 'Updates'
-    product: 'OMSGallery/Updates'
+    name: 'AzureActivity'
+    product: 'OMSGallery/AzureActivity'
     publisher: 'Microsoft'
     promotionCode: ''
   }
 ]
+param automationAccountName string = ''
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
   name: name
@@ -85,3 +44,10 @@ resource logAnalyticsSolutions 'Microsoft.OperationsManagement/solutions@2015-11
     promotionCode: solution.promotionCode
   }
 }]
+
+resource logAnalyticsAutomation 'Microsoft.OperationalInsights/workspaces/linkedServices@2020-08-01' = if (!empty(automationAccountName)) {
+  name: concat(logAnalyticsWorkspace.name, '/Automation')
+  properties: {
+    resourceId: resourceId('Microsoft.Automation/automationAccounts', automationAccountName)
+  }
+}
