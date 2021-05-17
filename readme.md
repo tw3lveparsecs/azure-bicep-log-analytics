@@ -11,7 +11,7 @@ module logAnalytics './main.bicep' = {
   params: {
     name: 'myLogAnalyticsWorkspace'
     sku: 'PerGB2018'
-    retentionInDays: 7
+    retentionInDays: 30
     solutions = [
       {
         name: 'ContainerInsights'
@@ -24,6 +24,33 @@ module logAnalytics './main.bicep' = {
         product: 'OMSGallery/Updates'
         publisher: 'Microsoft'
         promotionCode: ''
+      }
+    ]
+    dataSources: [
+      {
+        name: 'Application'
+        kind: 'WindowsEvent'
+        properties: {
+          eventLogName: 'Application'
+          eventTypes: [
+            {
+              eventType: 'Error'
+            }
+            {
+              eventType: 'Warning'
+            }
+          ]
+        }
+      }
+      {
+        name: 'LogicalDisk1'
+        kind: 'WindowsPerformanceCounter'
+        properties: {
+          objectName: 'LogicalDisk'
+          instanceName: '*'
+          intervalSeconds: 360
+          counterName: 'Avg Disk sec/Read'
+        }
       }
     ]
   }
