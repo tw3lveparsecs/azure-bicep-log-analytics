@@ -1,4 +1,6 @@
+@description('Location of the workspace')
 param location string = resourceGroup().location
+@description('Name of the workspace')
 param name string
 @allowed([
   'PerGB2018'
@@ -8,17 +10,18 @@ param name string
   'Standard'
   'Premium'
 ])
-param sku string = 'Free'
-param retentionInDays int = 7
-param solutions array = [
-  {
-    name: 'AzureActivity'
-    product: 'OMSGallery/AzureActivity'
-    publisher: 'Microsoft'
-    promotionCode: ''
-  }
-]
+@description('Sku of the workspace')
+param sku string
+@description('The workspace data retention in days, between 30 and 730')
+@minValue(7)
+@maxValue(730)
+param retentionInDays int
+@description('Solutions to add to workspace')
+param solutions array = []
+@description('Name of automation account to link to workspace')
 param automationAccountName string = ''
+@description('Datasources to add to workspace')
+param dataSources array = []
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
   name: name
@@ -51,3 +54,9 @@ resource logAnalyticsAutomation 'Microsoft.OperationalInsights/workspaces/linked
     resourceId: resourceId('Microsoft.Automation/automationAccounts', automationAccountName)
   }
 }
+
+resource logAnalyticsDataSource 'Microsoft.OperationalInsights/workspaces/dataSources@2020-08-01' = [for dataSource in dataSources: {
+  name: concat(logAnalyticsWorkspace.name, '/', dataSource.name)
+  kind: dataSource.kind
+  properties: dataSource.properties
+}]
