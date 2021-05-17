@@ -1,9 +1,8 @@
 # Log Analytics
-This module will deploy a Log Analytics Workspace with solutions.
+This module will deploy a Log Analytics Workspace with solutions and data sources.
 
 ## Usage
 ``` bicep
-
 param deploymentName string = concat('logAnalytics', utcNow())
 
 module logAnalytics './main.bicep' = {
@@ -12,16 +11,10 @@ module logAnalytics './main.bicep' = {
     name: 'myLogAnalyticsWorkspace'
     sku: 'PerGB2018'
     retentionInDays: 30
-    solutions = [
+    solutions: [
       {
-        name: 'ContainerInsights'
-        product: 'OMSGallery/ContainerInsights'
-        publisher: 'Microsoft'
-        promotionCode: ''
-      }
-      {
-        name: 'Updates'
-        product: 'OMSGallery/Updates'
+        name: 'AzureActivity'
+        product: 'OMSGallery/AzureActivity'
         publisher: 'Microsoft'
         promotionCode: ''
       }
