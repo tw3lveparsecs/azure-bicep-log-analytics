@@ -1,6 +1,6 @@
 param deploymentName string = concat('logAnalytics', utcNow())
 
-module logAnalytics 'main.bicep' = {
+module logAnalytics '../main.bicep' = {
   name: deploymentName
   params: {
     name: 'ajb-test-law01'
