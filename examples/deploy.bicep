@@ -3,9 +3,9 @@ param deploymentName string = concat('logAnalytics', utcNow())
 module logAnalytics '../main.bicep' = {
   name: deploymentName
   params: {
-    name: 'ajb-test-law01'
-    sku: 'Free'
-    retentionInDays: 7
+    name: 'myLogAnalyticsWorkspace'
+    sku: 'PerGB2018'
+    retentionInDays: 30
     solutions: [
       {
         name: 'AzureActivity'
