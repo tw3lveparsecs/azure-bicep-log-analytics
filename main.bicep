@@ -23,9 +23,16 @@ param automationAccountName string = ''
 @description('Datasources to add to workspace')
 param dataSources array = []
 @description('Enable lock to prevent accidental deletion')
-param enableDeleteLock bool = true
+param enableDeleteLock bool = false
+@description('Enable diagnostic logs')
+param enableDiagnostics bool = false
+@description('Storage account name. Only required if enableDiagnostics is set to true.')
+param diagnosticStorageAccountName string = ''
+@description('Storage account resourceop. Only required if enableDiagnostics is set to true.')
+param diagnosticStorageAccountResourceGroup string = ''
 
 var lockName = concat(logAnalyticsWorkspace.name, '-lck')
+var diagnosticsName = concat(logAnalyticsWorkspace.name, '-dgs')
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
   name: name
@@ -70,5 +77,26 @@ resource lock 'Microsoft.Authorization/locks@2016-09-01' = if (enableDeleteLock)
   scope: logAnalyticsWorkspace
   properties: {
     level: 'CanNotDelete'
+  }
+}
+
+resource diagnostics 'Microsoft.Insights/diagnosticSettings@2017-05-01-preview' = if (enableDiagnostics) {
+  name: diagnosticsName
+  scope: logAnalyticsWorkspace
+  properties: {
+    workspaceId: logAnalyticsWorkspace.id
+    storageAccountId: resourceId(diagnosticStorageAccountResourceGroup, 'Microsoft.Storage/storageAccounts', diagnosticStorageAccountName)
+    logs: [
+      {
+        category: 'Audit'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
   }
 }
