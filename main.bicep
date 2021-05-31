@@ -22,6 +22,10 @@ param solutions array = []
 param automationAccountName string = ''
 @description('Datasources to add to workspace')
 param dataSources array = []
+@description('Enable lock to prevent accidental deletion')
+param enableDeleteLock bool = true
+
+var lockName = concat(logAnalyticsWorkspace.name, '-lck')
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-08-01' = {
   name: name
@@ -60,3 +64,11 @@ resource logAnalyticsDataSource 'Microsoft.OperationalInsights/workspaces/dataSo
   kind: dataSource.kind
   properties: dataSource.properties
 }]
+
+resource lock 'Microsoft.Authorization/locks@2016-09-01' = if (enableDeleteLock) {
+  name: lockName
+  scope: logAnalyticsWorkspace
+  properties: {
+    level: 'CanNotDelete'
+  }
+}
