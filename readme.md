@@ -5,7 +5,7 @@ This module will deploy a Log Analytics Workspace with solutions, data sources a
 
 ### Example 1 - Log Analytics Workspace with solutions and data sources
 ``` bicep
-param deploymentName string = concat('logAnalytics', utcNow())
+param deploymentName string = 'logAnalytics${utcNow()}'
 
 module logAnalytics './main.bicep' = {
   name: deploymentName
@@ -54,7 +54,7 @@ module logAnalytics './main.bicep' = {
 
 ### Example 2 - Log Analytics Workspace with solutions, data sources and linked to an automation account
 ``` bicep
-param deploymentName string = concat('logAnalytics', utcNow())
+param deploymentName string = 'logAnalytics${utcNow()}'
 
 module logAnalytics './main.bicep' = {
   name: deploymentName
@@ -104,7 +104,7 @@ module logAnalytics './main.bicep' = {
 
 ### Example 3 - Log Analytics Workspace with solutions, data sources, delete lock and diagnostic logs enabled
 ``` bicep
-param deploymentName string = concat('logAnalytics', utcNow())
+param deploymentName string = 'logAnalytics${utcNow()}'
 
 module logAnalytics './main.bicep' = {
   name: deploymentName
