@@ -100,3 +100,6 @@ resource diagnostics 'Microsoft.Insights/diagnosticSettings@2017-05-01-preview' 
     ]
   }
 }
+
+output name string = logAnalyticsWorkspace.name
+output id string = logAnalyticsWorkspace.id
