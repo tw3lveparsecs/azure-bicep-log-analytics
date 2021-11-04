@@ -62,7 +62,7 @@ module logAnalytics './main.bicep' = {
     name: 'myLogAnalyticsWorkspace'
     sku: 'PerGB2018'
     retentionInDays: 30
-    automationAccountName: 'myAutomationAccount'
+    automationAccountID: 'myAutomationAccountResourceId'
     solutions: [
       {
         name: 'AzureActivity'
@@ -114,8 +114,7 @@ module logAnalytics './main.bicep' = {
     retentionInDays: 30
     enableDeleteLock: true
     enableDiagnostics: true
-    diagnosticStorageAccountName: 'myStorageAccount'
-    diagnosticStorageAccountResourceGroup: 'myStorageAccountResourceGroup'    
+    diagnosticStorageAccountId: 'myStorageAccountResourceId'
     solutions: [
       {
         name: 'AzureActivity'
@@ -151,6 +150,28 @@ module logAnalytics './main.bicep' = {
         }
       }
     ]
+  }
+}
+```
+
+### Example 4 - Log Analytics Workspace with saved search
+``` bicep
+param deploymentName string = 'logAnalytics${utcNow()}'
+
+module logAnalytics './main.bicep' = {
+  name: deploymentName
+  params: {
+    name: 'myLogAnalyticsWorkspace'
+    sku: 'PerGB2018'
+    retentionInDays: 30
+    savedSearches: [
+      {
+        name: 'MySearchQuery'
+        category: 'Other'
+        displayName: 'Example search query'
+        query: 'My search query expression'
+      }
+    ]    
   }
 }
 ```
